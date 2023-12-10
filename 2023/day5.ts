@@ -2,6 +2,10 @@ import * as fsPromise from 'fs/promises';
 
 type Range = { start: number; length: number; }
 
+const sortRanges = (ranges: Range[]): Range[] => {
+    return ranges.sort((a, b) => a.start - b.start);
+}
+
 const addDestinationsForRange = (destinations: Range[], range: Range, mapValues: number[][], mapValueIdx: number) => {
     if (mapValueIdx >= mapValues.length || range.start + range.length <= mapValues[mapValueIdx][1]) {
         destinations.push(range);
@@ -69,7 +73,7 @@ const processFile = async (part: number) => {
         }
 
         if (!line && mapValues.length > 0) {
-            sources = sources.sort((a, b) => a.start - b.start);
+            sources = sortRanges(sources);
             addValuesToSeeds(destinations, sources, mapValues);
 
             mapValues = [];
@@ -88,14 +92,7 @@ const processFile = async (part: number) => {
 
     addValuesToSeeds(destinations, sources, mapValues);
 
-    let min: number | undefined = undefined;
-    for (const destination of destinations) {
-        if (min === undefined || destination.start < min) {
-            min = destination.start;
-        }
-    }
-
-    console.log(min);
+    console.log(sortRanges(destinations)[0].start);
 }
 
 processFile(1);
