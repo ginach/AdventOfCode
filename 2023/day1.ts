@@ -39,7 +39,7 @@ const calculateValueForLine = (line: string): number => {
     return value;
 }
 
-const parseFile = async () => {
+const processFile = async () => {
     let total = 0;
     const file = await fsPromise.open('./inputs/day1.txt', 'r');
     for await (const line of file.readLines()) {
@@ -51,4 +51,4 @@ const parseFile = async () => {
     console.log(total);
 }
 
-parseFile();
+processFile();
